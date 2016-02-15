@@ -42,6 +42,33 @@ INSERT INTO `author` VALUES (1,'Михаил Афанасьевич Булгак
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tag`
+--
+
+DROP TABLE IF EXISTS `tag`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tag` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `alias` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `alias_UNIQUE` (`alias`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tag`
+--
+
+LOCK TABLES `tag` WRITE;
+/*!40000 ALTER TABLE `tag` DISABLE KEYS */;
+INSERT INTO `tag` VALUES (1,'Поэзия','poetry'),(2,'Роман','romance'),(3,'Классика','classical'),(4,'Сборник','collection'),(5,'Повесть','story'),(6,'Сказка','tale'),(7,'Поэма','poem'),(8,'Трагедия','tragedy'),(9,'Пьеса','play'),(10,'Проза','prose'),(11,'Комедия','comedy'),(12,'Мистика','mystery'),(13,'Сатира','satire'),(14,'Биография','biography'),(15,'Фантастика','fantastic');
+/*!40000 ALTER TABLE `tag` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+--
 -- Table structure for table `book`
 --
 
@@ -79,7 +106,9 @@ DROP TABLE IF EXISTS `book_at_author`;
 CREATE TABLE `book_at_author` (
   `book_id` int(11) NOT NULL,
   `author_id` int(11) NOT NULL,
-  PRIMARY KEY (`book_id`,`author_id`)
+  PRIMARY KEY (`book_id`,`author_id`),
+  CONSTRAINT `fk_book_at_author_author` FOREIGN KEY (`author_id`) REFERENCES `author` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_book_at_author_book` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -103,7 +132,9 @@ DROP TABLE IF EXISTS `book_at_tag`;
 CREATE TABLE `book_at_tag` (
   `book_id` int(11) NOT NULL,
   `tag_id` int(11) NOT NULL,
-  PRIMARY KEY (`book_id`,`tag_id`)
+  PRIMARY KEY (`book_id`,`tag_id`),
+  CONSTRAINT `fk_book_at_tag_tag` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_book_at_tag_book` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -116,33 +147,6 @@ LOCK TABLES `book_at_tag` WRITE;
 INSERT INTO `book_at_tag` VALUES (4,2),(4,3),(4,13),(4,15),(5,9),(6,3),(6,4),(6,5),(7,2),(7,3),(8,3),(9,2),(9,3),(10,5),(11,2),(11,3),(12,3),(12,5),(13,1),(13,2),(13,3),(14,3),(14,7),(14,10),(15,3),(16,3),(17,3),(18,2),(18,3),(19,2),(19,3),(20,3),(21,3),(21,4),(21,5),(22,2),(22,3),(23,2),(23,3),(24,3);
 /*!40000 ALTER TABLE `book_at_tag` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `tag`
---
-
-DROP TABLE IF EXISTS `tag`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tag` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
-  `alias` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `alias_UNIQUE` (`alias`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tag`
---
-
-LOCK TABLES `tag` WRITE;
-/*!40000 ALTER TABLE `tag` DISABLE KEYS */;
-INSERT INTO `tag` VALUES (1,'Поэзия','poetry'),(2,'Роман','romance'),(3,'Классика','classical'),(4,'Сборник','collection'),(5,'Повесть','story'),(6,'Сказка','tale'),(7,'Поэма','poem'),(8,'Трагедия','tragedy'),(9,'Пьеса','play'),(10,'Проза','prose'),(11,'Комедия','comedy'),(12,'Мистика','mystery'),(13,'Сатира','satire'),(14,'Биография','biography'),(15,'Фантастика','fantastic');
-/*!40000 ALTER TABLE `tag` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
